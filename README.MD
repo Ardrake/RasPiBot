@@ -9,6 +9,10 @@
 
 
 <p align="center">
+<a href="">
+    <img src="https://img.shields.io/badge/Solid%20Edge-ST9-blue.svg"
+         alt="Issues">
+  </a>
   <a href="https://github.com/Ardrake/RasPiBot/issues">
     <img src="https://img.shields.io/github/issues/anfederico/Clairvoyant.svg"
          alt="Issues">
