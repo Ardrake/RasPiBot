@@ -5,7 +5,7 @@
   <br>
   </h1>
 
-<h4 align="center">A remix of the original JD Robot <a href="http://www.robotshop.com/en/ez-robot-jd-humanoid-robot.html?gclid=CjwKEAjwhYLLBRDIjoCu0te4niASJAC0V4QP7JenOMWdii55pzNmMKMErcJr2WArvs0etysG6Q1lgBoCnZPw_wcB" target="_blank">JD Robot</a>.</h4>
+<h4 align="center">A remix of the original <a href="http://www.robotshop.com/en/ez-robot-jd-humanoid-robot.html?gclid=CjwKEAjwhYLLBRDIjoCu0te4niASJAC0V4QP7JenOMWdii55pzNmMKMErcJr2WArvs0etysG6Q1lgBoCnZPw_wcB" target="_blank">JD Robot</a>.</h4>
 
 
 <p align="center">
