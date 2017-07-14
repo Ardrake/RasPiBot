@@ -19,3 +19,4 @@
       - playback
   3. web cam support
   4. touch screen
+  5. Conversion en web app ? / Flask / django

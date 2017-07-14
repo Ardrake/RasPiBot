@@ -1,9 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import wx
-#import RasPiBot
+# import RasPiBot
 
-### Test servo screen
+# Test servo screen
 servo_list = [["Head", 90], ["Neck", 90], ["Left shoulder", 90], ["Left bicep", 90],
               ["Left hand", 90], ["Left hip", 90], ["Left knee", 90], ["Left ankle", 90],
               ["Right shoulder", 90], ["Right bicep", 90], ["Right hand", 90], ["Right hip", 90],
@@ -20,8 +20,8 @@ class ServoButton(wx.Button):
         self.change = myframe.my_change_val
 
     def OnButton(self, e):
-        def get_index(list, searchstr):
-            return [y[0] for y in list].index(searchstr)
+        def get_index(mylist, searchstr):
+            return [y[0] for y in mylist].index(searchstr)
 
         def update_val(index):
             if index == 0:
@@ -51,12 +51,14 @@ class ServoButton(wx.Button):
             if index == 12:
                 frame.servo_val_12.SetValue(str(servo_list[12][1]))
 
+        # Send command to servo hat here
         if self.servo_id[-2:] == "up":
             servo_name = self.servo_id[:(len(self.servo_id) - 3)]
             myindex = get_index(servo_list, servo_name)
             servo_list[myindex][1] += frame.my_change_val
             direction = '+'
             update_val(myindex)
+            # rotate up - positif
 
         else:
             servo_name = self.servo_id[:(len(self.servo_id) - 5)]
@@ -64,11 +66,13 @@ class ServoButton(wx.Button):
             servo_list[myindex][1] -= frame.my_change_val
             direction = '-'
             update_val(myindex)
+            # rotate down - négatif
 
         self.logger.AppendText(" Click on {} - pos = {} {} {} = {}\n".format(self.servo_id, str(self.servo_pos), direction, frame.my_change_val, servo_list[myindex][1]))
 
 
 class MyRobotUi(wx.Frame):
+    # Interface visuelle pour déboguage du RasPiBot.py
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, title=title, size=(700, 800))
 
@@ -87,6 +91,7 @@ class MyRobotUi(wx.Frame):
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRadiogroup)
 
         my_input_size = (50, 24)
+        # Beaucoup de repetition de code ici, a refactoré eventuellement
         self.servo_val_0 = wx.TextCtrl(self.panel3, size=my_input_size, style=wx.TE_READONLY,
                                        value=str(servo_list[0][1]))
         self.servo_val_1 = wx.TextCtrl(self.panel3, size=my_input_size, style=wx.TE_READONLY,
@@ -162,14 +167,14 @@ class MyRobotUi(wx.Frame):
 
         self.CreateStatusBar()  # A Statusbar in the bottom of the window
 
-        # Setting up the menu
+        # creation du menu
         filemenu = wx.Menu()
 
         menu_item_about = filemenu.Append(wx.ID_ABOUT, "&About", " Information about this program")
         filemenu.AppendSeparator()
         menu_item_exit = filemenu.Append(wx.ID_EXIT, "E&xit", " Terminate the program")
 
-        # Creating the menubar.
+        # Créationd e la barre de menu.
         menuBar = wx.MenuBar()
         menuBar.Append(filemenu, "&File")  # Adding the "filemenu" to the MenuBar
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
