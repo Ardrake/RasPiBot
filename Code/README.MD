@@ -1,15 +1,15 @@
 ## Section code / programation du projet
+
+#### Requis
+
++ Python 2.7.8
++ wxPython
++ Adafruit 16-Channel PWM - Servo hat
++ Raspberry Pi B
+
 ------
 
--- Requis
-
-+Python 2.7.8
-+wxPython
-+Adafruit 16-Channel PWM
-
-------
-
-+ encours
++ Encours
   1. Écran de test pour servos
 
 + A faire
