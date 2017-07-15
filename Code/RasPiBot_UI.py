@@ -8,15 +8,16 @@ from time import sleep
 
 # Test servo screen - 0 = servo neutral position
 servo_list = [["Head", 0], ["Neck", 0], ["Left shoulder", 0], ["Left bicep", 0],
-              ["Left hand", 0], ["Left hip", 90], ["Left knee", 0], ["Left ankle", 0],
+              ["Left hand", 0], ["Left hip", 0], ["Left knee", 0], ["Left ankle", 0],
               ["Right shoulder", 0], ["Right bicep", 0], ["Right hand", 0], ["Right hip", 0],
-              ["Right knee", 0]]
+              ["Right knee", 0],["Right ankle", 0]]
 
 pwm = PWM(0x40)
 servoMin = 150
 servoMax = 600
 minAngle = -90
 maxAngle = 90
+
 pwm.setPWMFreq(50)
 
 
@@ -29,15 +30,23 @@ class ServoButton(wx.Button):
         self.logger = myframe.logger
         self.change = myframe.my_change_val
 
+    def DegreesToPulseLength(self, degrees, in_min, in_max, out_min,out_max):
+        return ((degrees - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+
     def Rotate(self, servoindex, value):
+        print("Inside Rotate " + str(servoindex) + " value " + str(value))
         if (servoindex < 0 or servoindex > 15):
             print("Invalid servo number (0-15)")
-        elif value < - 90 or value > 90
+        elif value < - 90 or value > 90:
             print("Invalid rotation angle (-90 - 90")
         else:
-            pulseLength = self.DegreesToPulseLength(value + self.listAngle[servoindex], self.minAngle, self.maxAngle,
-                                                    self.servoMin, self.servoMax)
-            self.pwm.setPWM(servoindex, 50, pulseLength)
+            print(value, servo_list[servoindex][1], minAngle, maxAngle,
+                                                    servoMin, servoMax)
+            
+            pulseLength = self.DegreesToPulseLength(value, minAngle, maxAngle,
+                                                    servoMin, servoMax)
+            print(pulseLength)
+            pwm.setPWM(servoindex, 50, pulseLength)
 
     def OnButton(self, e):
         def get_index(mylist, searchstr):
@@ -70,6 +79,8 @@ class ServoButton(wx.Button):
                 frame.servo_val_11.SetValue(str(servo_list[11][1]))
             if index == 12:
                 frame.servo_val_12.SetValue(str(servo_list[12][1]))
+            if index == 13:
+                frame.servo_val_13.SetValue(str(servo_list[13][1]))                
 
         # Send command to servo hat here
         if self.servo_id[-2:] == "up":
@@ -79,8 +90,9 @@ class ServoButton(wx.Button):
             direction = '+'
             update_val(myindex)
             # rotate up - positif
-            self.Rotate(myindex, frame.my_change_val)
-
+            print("Rotate " + str(myindex) + " val " + str(frame.my_change_val))
+            self.Rotate(myindex, servo_list[myindex][1])
+                        
         else:
             servo_name = self.servo_id[:(len(self.servo_id) - 5)]
             myindex = get_index(servo_list, servo_name)
@@ -88,7 +100,8 @@ class ServoButton(wx.Button):
             direction = '-'
             update_val(myindex)
             # rotate down - négatif
-            self.Rotate(myindex, -frame.my_change_val)
+            print("Rotate " + str(myindex) + " val -" + str(frame.my_change_val))
+            self.Rotate(myindex, servo_list[myindex][1])
 
         self.logger.AppendText(" Click on {} - pos = {} {} {} = {}\n".format(self.servo_id, str(self.servo_pos), direction, frame.my_change_val, servo_list[myindex][1]))
 
@@ -140,6 +153,8 @@ class MyRobotUi(wx.Frame):
                                         value=str(servo_list[11][1]))
         self.servo_val_12 = wx.TextCtrl(self.panel3, size=my_input_size, style=wx.TE_READONLY,
                                         value=str(servo_list[12][1]))
+        self.servo_val_13 = wx.TextCtrl(self.panel3, size=my_input_size, style=wx.TE_READONLY,
+                                        value=str(servo_list[13][1]))
 
         self.sizer_ver_03 = wx.BoxSizer(wx.VERTICAL)
         myborder = 3.2
@@ -156,6 +171,7 @@ class MyRobotUi(wx.Frame):
         self.sizer_ver_03.Add(self.servo_val_10, flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=myborder)
         self.sizer_ver_03.Add(self.servo_val_11, flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=myborder)
         self.sizer_ver_03.Add(self.servo_val_12, flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=myborder)
+        self.sizer_ver_03.Add(self.servo_val_13, flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=myborder)
         self.panel3.SetSizerAndFit(self.sizer_ver_03)
 
         self.logger = wx.TextCtrl(self, pos=(370, 20), size=(300, 600), style=wx.TE_MULTILINE | wx.TE_READONLY)
