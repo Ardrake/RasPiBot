@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import wx
+from Adafruit_PWM_Servo_Driver import PWM
+import time
+from time import sleep
 # import RasPiBot
 
-# Test servo screen
-servo_list = [["Head", 90], ["Neck", 90], ["Left shoulder", 90], ["Left bicep", 90],
-              ["Left hand", 90], ["Left hip", 90], ["Left knee", 90], ["Left ankle", 90],
-              ["Right shoulder", 90], ["Right bicep", 90], ["Right hand", 90], ["Right hip", 90],
-              ["Right knee", 90]]
+# Test servo screen - 0 = servo neutral position
+servo_list = [["Head", 0], ["Neck", 0], ["Left shoulder", 0], ["Left bicep", 0],
+              ["Left hand", 0], ["Left hip", 90], ["Left knee", 0], ["Left ankle", 0],
+              ["Right shoulder", 0], ["Right bicep", 0], ["Right hand", 0], ["Right hip", 0],
+              ["Right knee", 0]]
+
+pwm = PWM(0x40)
+servoMin = 150
+servoMax = 600
+minAngle = -90
+maxAngle = 90
+pwm.setPWMFreq(50)
 
 
 class ServoButton(wx.Button):
@@ -18,6 +28,16 @@ class ServoButton(wx.Button):
         self.frame = myframe
         self.logger = myframe.logger
         self.change = myframe.my_change_val
+
+    def Rotate(self, servoindex, value):
+        if (servoindex < 0 or servoindex > 15):
+            print("Invalid servo number (0-15)")
+        elif value < - 90 or value > 90
+            print("Invalid rotation angle (-90 - 90")
+        else:
+            pulseLength = self.DegreesToPulseLength(value + self.listAngle[servoindex], self.minAngle, self.maxAngle,
+                                                    self.servoMin, self.servoMax)
+            self.pwm.setPWM(servoindex, 50, pulseLength)
 
     def OnButton(self, e):
         def get_index(mylist, searchstr):
@@ -59,6 +79,7 @@ class ServoButton(wx.Button):
             direction = '+'
             update_val(myindex)
             # rotate up - positif
+            self.Rotate(myindex, frame.my_change_val)
 
         else:
             servo_name = self.servo_id[:(len(self.servo_id) - 5)]
@@ -67,6 +88,7 @@ class ServoButton(wx.Button):
             direction = '-'
             update_val(myindex)
             # rotate down - négatif
+            self.Rotate(myindex, -frame.my_change_val)
 
         self.logger.AppendText(" Click on {} - pos = {} {} {} = {}\n".format(self.servo_id, str(self.servo_pos), direction, frame.my_change_val, servo_list[myindex][1]))
 
@@ -82,7 +104,7 @@ class MyRobotUi(wx.Frame):
         self.panel2 = wx.Panel(self, pos=(X2_POS, Y_POS)) # down button panel
         self.panel3 = wx.Panel(self, pos=(310, 40)) # serva value panel
         self.panel3.SetBackgroundColour('LIGHT GREY')
-        self.radiopanel = wx.Panel(self, pos=(50, 05), size=(250, 30))
+        self.radiopanel = wx.Panel(self, pos=(50, 5), size=(250, 30))
 
         self.rb1 = wx.RadioButton(self.radiopanel, -1, '1 degré', (10, 7), style=wx.RB_GROUP)
         self.rb2 = wx.RadioButton(self.radiopanel, -1, '5 degré', (90, 7))
