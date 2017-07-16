@@ -42,7 +42,7 @@ class ServoButton(wx.Button):
         else:
             print(value, servo_list[servoindex][1], minAngle, maxAngle,
                                                     servoMin, servoMax)
-            
+
             pulseLength = self.DegreesToPulseLength(value, minAngle, maxAngle,
                                                     servoMin, servoMax)
             print(pulseLength)
@@ -80,7 +80,7 @@ class ServoButton(wx.Button):
             if index == 12:
                 frame.servo_val_12.SetValue(str(servo_list[12][1]))
             if index == 13:
-                frame.servo_val_13.SetValue(str(servo_list[13][1]))                
+                frame.servo_val_13.SetValue(str(servo_list[13][1]))
 
         # Send command to servo hat here
         if self.servo_id[-2:] == "up":
@@ -92,7 +92,7 @@ class ServoButton(wx.Button):
             # rotate up - positif
             print("Rotate " + str(myindex) + " val " + str(frame.my_change_val))
             self.Rotate(myindex, servo_list[myindex][1])
-                        
+
         else:
             servo_name = self.servo_id[:(len(self.servo_id) - 5)]
             myindex = get_index(servo_list, servo_name)
@@ -109,15 +109,16 @@ class ServoButton(wx.Button):
 class MyRobotUi(wx.Frame):
     # Interface visuelle pour déboguage du RasPiBot.py
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, title=title, size=(700, 800))
+        wx.Frame.__init__(self, parent, title=title, size=(800, 800))
 
-        BUTTON_SIZE = (120, 30); X1_POS = 50; X2_POS = 180; Y_POS = 40
+        BUTTON_SIZE = (160, 30); X1_POS = 30; X2_POS = 200; Y_POS = 40
 
         self.panel = wx.Panel(self, pos=(X1_POS, Y_POS)) # up button panel
         self.panel2 = wx.Panel(self, pos=(X2_POS, Y_POS)) # down button panel
-        self.panel3 = wx.Panel(self, pos=(310, 40)) # serva value panel
+        self.panel3 = wx.Panel(self, pos=(370, 40)) # servo value panel
         self.panel3.SetBackgroundColour('LIGHT GREY')
-        self.radiopanel = wx.Panel(self, pos=(50, 5), size=(250, 30))
+        self.radiopanel = wx.Panel(self, pos=(50, 5), size=(300, 30))
+        self.logger = wx.TextCtrl(self, pos=(470, 20), size=(300, 600), style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         self.rb1 = wx.RadioButton(self.radiopanel, -1, '1 degré', (10, 7), style=wx.RB_GROUP)
         self.rb2 = wx.RadioButton(self.radiopanel, -1, '5 degré', (90, 7))
@@ -174,7 +175,6 @@ class MyRobotUi(wx.Frame):
         self.sizer_ver_03.Add(self.servo_val_13, flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=myborder)
         self.panel3.SetSizerAndFit(self.sizer_ver_03)
 
-        self.logger = wx.TextCtrl(self, pos=(370, 20), size=(300, 600), style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.my_change_val = 1
 
         self.buttons = []
@@ -206,15 +206,27 @@ class MyRobotUi(wx.Frame):
         self.CreateStatusBar()  # A Statusbar in the bottom of the window
 
         # creation du menu
-        filemenu = wx.Menu()
+        progmenu = wx.Menu()
+        robotmenu = wx.Menu()
+        sequencemenu = wx.Menu()
 
-        menu_item_about = filemenu.Append(wx.ID_ABOUT, "&About", " Information about this program")
-        filemenu.AppendSeparator()
-        menu_item_exit = filemenu.Append(wx.ID_EXIT, "E&xit", " Terminate the program")
+        menu_item_about = progmenu.Append(wx.ID_ABOUT, "&A propos", " Information sur RasPiBot UI")
+        progmenu.AppendSeparator()
+        menu_item_exit = progmenu.Append(wx.ID_EXIT, "Q&uitter", " Quitté le programme")
 
-        # Créationd e la barre de menu.
+        menu_item_robot_new = robotmenu.Append(wx.ID_ANY, "New", "Module New robot")
+        menu_item_robot_load = robotmenu.Append(wx.ID_ANY, "Load", "Module load robot")
+        menu_item_robot_edit = robotmenu.Append(wx.ID_ANY, "Edit", "Module edit robot")
+
+        menu_item_sequenceur_new = sequencemenu.Append(wx.ID_ANY, "New", "Module New")
+        menu_item_sequenceur_load = sequencemenu.Append(wx.ID_ANY, "load", " Module load")
+        menu_item_sequenceur_edit = sequencemenu.Append(wx.ID_ANY, "Edit", " Module edit")
+
+        # Création de la barre de menu.
         menuBar = wx.MenuBar()
-        menuBar.Append(filemenu, "&File")  # Adding the "filemenu" to the MenuBar
+        menuBar.Append(progmenu, "&Programme")  # rajout de fichier au MenuBar
+        menuBar.Append(robotmenu, "&Robot")  # rajout de Robot au MenuBar
+        menuBar.Append(sequencemenu, "&Sequenceur")  # rajout de Sequenceur au MenuBar
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
         self.Show(True)
 
