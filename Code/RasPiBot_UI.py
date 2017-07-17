@@ -10,7 +10,7 @@ from time import sleep
 servo_list = [["Head", 0], ["Neck", 0], ["Left shoulder", 0], ["Left bicep", 0],
               ["Left hand", 0], ["Left hip", 0], ["Left knee", 0], ["Left ankle", 0],
               ["Right shoulder", 0], ["Right bicep", 0], ["Right hand", 0], ["Right hip", 0],
-              ["Right knee", 0],["Right ankle", 0]]
+              ["Right knee", 0], ["Right ankle", 0]]
 
 pwm = PWM(0x40)
 servoMin = 150
@@ -30,25 +30,26 @@ class ServoButton(wx.Button):
         self.logger = myframe.logger
         self.change = myframe.my_change_val
 
-    def DegreesToPulseLength(self, degrees, in_min, in_max, out_min,out_max):
-        return ((degrees - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+    @staticmethod
+    def degrees_to_pulse_length(degrees, in_min, in_max, out_min, out_max):
+        return ((degrees - in_min) * (out_max - out_min)) / ((in_max - in_min) + out_min)
 
-    def Rotate(self, servoindex, value):
+    def rotate(self, servoindex, value):
         print("Inside Rotate " + str(servoindex) + " value " + str(value))
-        if (servoindex < 0 or servoindex > 15):
+        if servoindex < 0 or servoindex > 15:
             print("Invalid servo number (0-15)")
         elif value < - 90 or value > 90:
             print("Invalid rotation angle (-90 - 90")
         else:
             print(value, servo_list[servoindex][1], minAngle, maxAngle,
-                                                    servoMin, servoMax)
+                  servoMin, servoMax)
 
-            pulseLength = self.DegreesToPulseLength(value, minAngle, maxAngle,
-                                                    servoMin, servoMax)
-            print(pulseLength)
-            pwm.setPWM(servoindex, 50, pulseLength)
+            pulse_length = self.degrees_to_pulse_length(value, minAngle, maxAngle,
+                                                        servoMin, servoMax)
+            print(pulse_length)
+            pwm.setPWM(servoindex, 50, pulse_length)
 
-    def OnButton(self, e):
+    def on_button(self):
         def get_index(mylist, searchstr):
             return [y[0] for y in mylist].index(searchstr)
 
@@ -91,7 +92,7 @@ class ServoButton(wx.Button):
             update_val(myindex)
             # rotate up - positif
             print("Rotate " + str(myindex) + " val " + str(frame.my_change_val))
-            self.Rotate(myindex, servo_list[myindex][1])
+            self.rotate(myindex, servo_list[myindex][1])
 
         else:
             servo_name = self.servo_id[:(len(self.servo_id) - 5)]
@@ -101,9 +102,11 @@ class ServoButton(wx.Button):
             update_val(myindex)
             # rotate down - négatif
             print("Rotate " + str(myindex) + " val -" + str(frame.my_change_val))
-            self.Rotate(myindex, servo_list[myindex][1])
+            self.rotate(myindex, servo_list[myindex][1])
 
-        self.logger.AppendText(" Click on {} - pos = {} {} {} = {}\n".format(self.servo_id, str(self.servo_pos), direction, frame.my_change_val, servo_list[myindex][1]))
+        self.logger.AppendText(" Click on {} - pos = {} {} {} = {}\n".format(self.servo_id, str(self.servo_pos),
+                                                                             direction, frame.my_change_val,
+                                                                             servo_list[myindex][1]))
 
 
 class MyRobotUi(wx.Frame):
@@ -111,11 +114,14 @@ class MyRobotUi(wx.Frame):
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, title=title, size=(800, 800))
 
-        BUTTON_SIZE = (160, 30); X1_POS = 30; X2_POS = 200; Y_POS = 40
+        button_size = (160, 30)
+        x1_pos = 30
+        x2_pos = 200
+        y_pos = 40
 
-        self.panel = wx.Panel(self, pos=(X1_POS, Y_POS)) # up button panel
-        self.panel2 = wx.Panel(self, pos=(X2_POS, Y_POS)) # down button panel
-        self.panel3 = wx.Panel(self, pos=(370, 40)) # servo value panel
+        self.panel = wx.Panel(self, pos=(x1_pos, y_pos))  # up button panel
+        self.panel2 = wx.Panel(self, pos=(x2_pos, y_pos))  # down button panel
+        self.panel3 = wx.Panel(self, pos=(370, 40))  # servo value panel
         self.panel3.SetBackgroundColour('LIGHT GREY')
         self.radiopanel = wx.Panel(self, pos=(50, 5), size=(300, 30))
         self.logger = wx.TextCtrl(self, pos=(470, 20), size=(300, 600), style=wx.TE_MULTILINE | wx.TE_READONLY)
@@ -124,7 +130,7 @@ class MyRobotUi(wx.Frame):
         self.rb2 = wx.RadioButton(self.radiopanel, -1, '5 degré', (90, 7))
         self.rb3 = wx.RadioButton(self.radiopanel, -1, '10 degré', (170, 7))
 
-        self.Bind(wx.EVT_RADIOBUTTON, self.OnRadiogroup)
+        self.Bind(wx.EVT_RADIOBUTTON, self.on_radio_group)
 
         my_input_size = (50, 24)
         # Beaucoup de repetition de code ici, a refactoré eventuellement
@@ -181,8 +187,8 @@ class MyRobotUi(wx.Frame):
 
         for servo in servo_list:
             mybutton = ServoButton(servo_id=str(servo[0]) + " up", servo_pos=servo[1], parent=self.panel,
-                                   label=str(servo[0])+" up", size=BUTTON_SIZE, myframe=self)
-            mybutton.Bind(wx.EVT_BUTTON, mybutton.OnButton)
+                                   label=str(servo[0])+" up", size=button_size, myframe=self)
+            mybutton.Bind(wx.EVT_BUTTON, mybutton.on_button)
             self.buttons.append(mybutton)
 
         self.sizer_ver = wx.BoxSizer(wx.VERTICAL)
@@ -194,8 +200,8 @@ class MyRobotUi(wx.Frame):
         self.buttons = []
         for servo in servo_list:
             mybutton = ServoButton(servo_id=str(servo[0]) + " down", servo_pos=servo[1], parent=self.panel2,
-                                   label=str(servo[0]) + " down", size=BUTTON_SIZE, myframe=self)
-            mybutton.Bind(wx.EVT_BUTTON, mybutton.OnButton)
+                                   label=str(servo[0]) + " down", size=button_size, myframe=self)
+            mybutton.Bind(wx.EVT_BUTTON, mybutton.on_button)
             self.buttons.append(mybutton)
 
         self.sizer_ver_02 = wx.BoxSizer(wx.VERTICAL)
@@ -203,7 +209,7 @@ class MyRobotUi(wx.Frame):
             self.sizer_ver_02.Add(button)
         self.panel2.SetSizerAndFit(self.sizer_ver_02)
 
-        self.CreateStatusBar()  # A Statusbar in the bottom of the window
+        self.CreateStatusBar()  # A Status bar in the bottom of the window
 
         # creation du menu
         progmenu = wx.Menu()
@@ -223,11 +229,11 @@ class MyRobotUi(wx.Frame):
         menu_item_sequenceur_edit = sequencemenu.Append(wx.ID_ANY, "Edit", " Module edit")
 
         # Création de la barre de menu.
-        menuBar = wx.MenuBar()
-        menuBar.Append(progmenu, "&Programme")  # rajout de fichier au MenuBar
-        menuBar.Append(robotmenu, "&Robot")  # rajout de Robot au MenuBar
-        menuBar.Append(sequencemenu, "&Sequenceur")  # rajout de Sequenceur au MenuBar
-        self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
+        menu_bar = wx.MenuBar()
+        menu_bar.Append(progmenu, "&Programme")  # rajout de fichier au MenuBar
+        menu_bar.Append(robotmenu, "&Robot")  # rajout de Robot au MenuBar
+        menu_bar.Append(sequencemenu, "&Sequenceur")  # rajout de Sequenceur au MenuBar
+        self.SetMenuBar(menu_bar)  # Adding the MenuBar to the Frame content.
         self.Show(True)
 
         # set events
@@ -236,20 +242,20 @@ class MyRobotUi(wx.Frame):
 
         self.Show(True)
 
-    def on_about(self, e):
+    def on_about(self):
         print("On about clicked")
         dlg = wx.MessageDialog(self, "About RasPiBot was clicked", "About", wx.OK)
         dlg.ShowModal()  # Show it
         dlg.Destroy()  # finally destroy it when finished.
 
-    def on_exit(self, e):
+    def on_exit(self):
         self.Close(True)  # Close the frame.
 
     def click_on(self, event):
         name = event.GetEventObject().bname
         self.logger.AppendText(" Click on object with Id {} {} \n".format(event.GetId(), name))
 
-    def OnRadiogroup(self, e):
+    def on_radio_group(self, e):
         rb = e.GetEventObject()
         myval = int(rb.GetLabel()[:2].strip())
         self.my_change_val = myval
