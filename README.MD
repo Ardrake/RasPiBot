@@ -14,7 +14,7 @@
          alt="Issues">
   </a>
   <a href="https://github.com/Ardrake/RasPiBot/issues">
-    <img src="https://img.shields.io/github/issues/badges/shields.svg">
+    <img src="https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg">
   </a>
     <a href=""><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg">
   </a>
