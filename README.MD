@@ -1,9 +1,7 @@
-<h1 align="center">
-  <br>
-  
-![GitHub Logo](http://shanycarle.com/RasPiBot/files/images/RasPiBotLogoHorizontal.png)
-  <br>
-  </h1>
+<p align="center">
+    <img src="https://raspibot.github.io/RasPiBot/files/images/RasPiBotLogoHorizontal.png"
+        height="130">
+</p>
 
 <h4 align="center">A remix of the original <a href="http://www.robotshop.com/en/ez-robot-jd-humanoid-robot.html?gclid=CjwKEAjwhYLLBRDIjoCu0te4niASJAC0V4QP7JenOMWdii55pzNmMKMErcJr2WArvs0etysG6Q1lgBoCnZPw_wcB" target="_blank">JD Robot</a>.</h4>
 
