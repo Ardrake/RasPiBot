@@ -8,13 +8,10 @@
 
 <p align="center">
 <a href="">
-    <img src="https://img.shields.io/badge/Solid%20Edge-ST9-blue.svg"
-         alt="Issues">
+    <img src="https://img.shields.io/badge/Solid%20Edge-2019-blue.svg"
+         alt="SE  2019">
   </a>
-  <a href="https://github.com/Ardrake/RasPiBot/issues">
-    <img src="https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg">
-  </a>
-    <a href=""><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg">
+ <a href=""><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg">
   </a>
      <a href='https://ko-fi.com/A8722AIZ' target='_blank'><img height='20' style='border:0px;height:20px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
     </a>
