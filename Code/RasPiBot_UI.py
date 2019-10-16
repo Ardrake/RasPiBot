@@ -49,7 +49,7 @@ class ServoButton(wx.Button):
             print(pulse_length)
             #pwm.setPWM(servoindex, 50, pulse_length)
 
-    def on_button(self):
+    def on_button(self, event=None):
         def get_index(mylist, searchstr):
             return [y[0] for y in mylist].index(searchstr)
 
@@ -209,7 +209,8 @@ class MyRobotUi(wx.Frame):
             self.sizer_ver_02.Add(button)
         self.panel2.SetSizerAndFit(self.sizer_ver_02)
 
-        self.CreateStatusBar()  # A Status bar in the bottom of the window
+        self.statusbar = self.CreateStatusBar(1)
+        self.statusbar.SetStatusText('No Robot selected')
 
         # creation du menu
         progmenu = wx.Menu()
@@ -239,16 +240,47 @@ class MyRobotUi(wx.Frame):
         # set events
         self.Bind(wx.EVT_MENU, self.on_about, menu_item_about)
         self.Bind(wx.EVT_MENU, self.on_exit, menu_item_exit)
+        self.Bind(wx.EVT_MENU, self.on_new_robot, menu_item_robot_new)
+        self.Bind(wx.EVT_MENU, self.on_load_robot, menu_item_robot_load)
+        self.Bind(wx.EVT_MENU, self.on_edit_robot, menu_item_robot_edit)
+
 
         self.Show(True)
 
-    def on_about(self):
-        print("On about clicked")
-        dlg = wx.MessageDialog(self, "About RasPiBot was clicked", "About", wx.OK)
-        dlg.ShowModal()  # Show it
-        dlg.Destroy()  # finally destroy it when finished.
+    def on_new_robot(self, event=None):
+        print("New robot creation")
 
-    def on_exit(self):
+        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Text Entry Dialog')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
+    def on_edit_robot(self, event=None):
+        print("Edit robot")
+
+        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Text Entry Dialog')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
+    def on_load_robot(self, event=None):
+        print("Load robot")
+
+        dlg = wx.TextEntryDialog(self, 'Select robot', 'Text Entry Dialog')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
+    def on_about(self, event=None):
+            print("On about clicked")
+            dlg = wx.MessageDialog(self, "About RasPiBot was clicked", "About", wx.OK)
+            dlg.ShowModal()  # Show it
+            dlg.Destroy()  # finally destroy it when finished.
+
+    def on_exit(self, event=None):
         self.Close(True)  # Close the frame.
 
     def click_on(self, event):
