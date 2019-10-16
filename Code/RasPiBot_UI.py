@@ -243,14 +243,44 @@ class MyRobotUi(wx.Frame):
         self.Bind(wx.EVT_MENU, self.on_new_robot, menu_item_robot_new)
         self.Bind(wx.EVT_MENU, self.on_load_robot, menu_item_robot_load)
         self.Bind(wx.EVT_MENU, self.on_edit_robot, menu_item_robot_edit)
+        self.Bind(wx.EVT_MENU, self.on_new_sequence, menu_item_sequenceur_new)
+        self.Bind(wx.EVT_MENU, self.on_load_sequence, menu_item_sequenceur_load)
+        self.Bind(wx.EVT_MENU, self.on_edit_sequence, menu_item_sequenceur_edit)
 
 
         self.Show(True)
 
+    def on_new_sequence(self, event=None):
+        print("New sequnce creation")
+
+        dlg = wx.TextEntryDialog(self, 'Enter Sequence Name', 'Creation de sequence robot')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
+    def on_load_sequence(self, event=None):
+        print("Load Sequence")
+
+        dlg = wx.TextEntryDialog(self, 'Load sequence Name', 'Chargé une sequence robot')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
+    def on_edit_sequence(self, event=None):
+        print("Edit sequence")
+
+        dlg = wx.TextEntryDialog(self, 'Edit sequence', 'Modifier une sequence robot')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.statusbar.SetStatusText(dlg.GetValue())
+        dlg.Destroy()
+
     def on_new_robot(self, event=None):
         print("New robot creation")
 
-        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Text Entry Dialog')
+        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Creation des parametre robot')
 
         if dlg.ShowModal() == wx.ID_OK:
             self.statusbar.SetStatusText(dlg.GetValue())
@@ -259,7 +289,7 @@ class MyRobotUi(wx.Frame):
     def on_edit_robot(self, event=None):
         print("Edit robot")
 
-        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Text Entry Dialog')
+        dlg = wx.TextEntryDialog(self, 'Enter Robot Name', 'Modification des parametre robot')
 
         if dlg.ShowModal() == wx.ID_OK:
             self.statusbar.SetStatusText(dlg.GetValue())
@@ -268,7 +298,7 @@ class MyRobotUi(wx.Frame):
     def on_load_robot(self, event=None):
         print("Load robot")
 
-        dlg = wx.TextEntryDialog(self, 'Select robot', 'Text Entry Dialog')
+        dlg = wx.TextEntryDialog(self, 'Select robot', 'Chargement des parametre robot')
 
         if dlg.ShowModal() == wx.ID_OK:
             self.statusbar.SetStatusText(dlg.GetValue())
@@ -276,7 +306,7 @@ class MyRobotUi(wx.Frame):
 
     def on_about(self, event=None):
             print("On about clicked")
-            dlg = wx.MessageDialog(self, "About RasPiBot was clicked", "About", wx.OK)
+            dlg = wx.MessageDialog(self, "Interface Robot RasPiBot - par A. Cooke", "A Propos", wx.OK)
             dlg.ShowModal()  # Show it
             dlg.Destroy()  # finally destroy it when finished.
 
