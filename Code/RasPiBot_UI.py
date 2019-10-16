@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import wx
+import RasPiBot_Data
+
 #from Adafruit_PWM_Servo_Driver import PWM
 import time
 from time import sleep
@@ -113,6 +115,8 @@ class MyRobotUi(wx.Frame):
     # Interface visuelle pour déboguage du RasPiBot.py
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, title=title, size=(800, 800))
+
+        RasPiBot_Data.create_connection('RobotDB.db')
 
         button_size = (160, 30)
         x1_pos = 30
