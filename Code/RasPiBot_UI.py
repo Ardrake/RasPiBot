@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import wx
-from Adafruit_PWM_Servo_Driver import PWM
+#from Adafruit_PWM_Servo_Driver import PWM
 import time
 from time import sleep
 # import RasPiBot
@@ -12,13 +12,13 @@ servo_list = [["Head", 0], ["Neck", 0], ["Left shoulder", 0], ["Left bicep", 0],
               ["Right shoulder", 0], ["Right bicep", 0], ["Right hand", 0], ["Right hip", 0],
               ["Right knee", 0], ["Right ankle", 0]]
 
-pwm = PWM(0x40)
+#pwm = PWM(0x40)
 servoMin = 150
 servoMax = 600
 minAngle = -90
 maxAngle = 90
 
-pwm.setPWMFreq(50)
+#pwm.setPWMFreq(50)
 
 
 class ServoButton(wx.Button):
@@ -47,7 +47,7 @@ class ServoButton(wx.Button):
             pulse_length = self.degrees_to_pulse_length(value, minAngle, maxAngle,
                                                         servoMin, servoMax)
             print(pulse_length)
-            pwm.setPWM(servoindex, 50, pulse_length)
+            #pwm.setPWM(servoindex, 50, pulse_length)
 
     def on_button(self):
         def get_index(mylist, searchstr):
