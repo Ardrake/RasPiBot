@@ -2,7 +2,7 @@
 
 #### Requis
 
-+ Python 2.7.8
++ Python 3.6
 + wxPython
 + Adafruit 16-Channel PWM - Servo hat
 + Raspberry Pi B
