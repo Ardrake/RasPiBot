@@ -115,7 +115,8 @@ class MyRobotUi(wx.Frame):
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, title=title, size=(800, 800))
 
-        RasPiBot_Data.create_connection('RasPiBotDB.db')
+        conn = RasPiBot_Data.create_connection('RasPiBotDB.db')
+        RasPiBot_Data.init_data(conn)
 
         button_size = (160, 30)
         x1_pos = 30
